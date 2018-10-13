@@ -4,8 +4,8 @@ import queue
 import threading
 import os
 
-DISCORD_KEY = os.environ['DISCORD_KEY']
-DISCORD_CHANNEL = os.environ['DISCORD_CHANNEL']
+DISCORD_KEY = "MjU1MzYyNTAxMjc1ODExODQy.DqMsNQ.FHApvRO7LgG5H1ywt3rwCLObM64"
+DISCORD_CHANNEL = "406549665400619017"
 
 class Bot:
 
@@ -40,6 +40,7 @@ class Bot:
         tok = message.content.split(' ')
         if tok[0] == ']]':
             if tok[1] == 'skip':
+                print("skipping")
                 if self.player:
                     self.player.stop()
             else:
