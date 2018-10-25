@@ -1,2 +1,1 @@
-youtube_dl
 git+https://github.com/xrisk/discord.py@async#egg=discord.py[voice]

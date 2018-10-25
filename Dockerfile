@@ -10,8 +10,12 @@ COPY requirements.txt /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+ARG CACHE_DATE=2018-10-26
+
+COPY requirements_fresh.txt /app
+
+RUN pip install --no-cache-dir -r requirements_fresh.txt
+
 COPY . /app
 
 CMD ["python", "-u", "bot.py"]
-
-
