@@ -1,0 +1,2 @@
+DISCORD_KEY = None
+DISCORD_CHANNEL = None
