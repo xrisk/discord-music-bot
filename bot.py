@@ -1,14 +1,17 @@
 import asyncio
 import discord
 import queue
+import sys
 import threading
-import os
 
-DISCORD_KEY = "MjU1MzYyNTAxMjc1ODExODQy.DqMsNQ.FHApvRO7LgG5H1ywt3rwCLObM64"
-DISCORD_CHANNEL = "406549665400619017"
+from config import DISCORD_KEY, DISCORD_CHANNEL
+
+if not (DISCORD_KEY and DISCORD_CHANNEL):
+    print("Please set DISCORD_KEY and DISCORD_CHANNEL in config.py")
+    sys.exit(1)
+
 
 class Bot:
-
     def __init__(self, token, vc_channel):
         self.client = discord.Client()
         self.queue = queue.Queue(maxsize=10)
@@ -25,21 +28,20 @@ class Bot:
         self.client.event(self.on_ready)
         self.client.run(self.token)
 
-
     async def on_ready(self):
         chan = self.client.get_channel(self.channel_id)
         self.vc = await self.client.join_voice_channel(chan)
         self.ready = True
         print("Bot is ready.")
-        
+
     async def on_message(self, message):
-        print('Message recived: {}'.format(message.content))
+        print("Message recived: {}".format(message.content))
         if not self.ready:
-            print('Ignoring message')
+            print("Ignoring message")
             return
-        tok = message.content.split(' ')
-        if tok[0] == ']]':
-            if tok[1] == 'skip':
+        tok = message.content.split(" ")
+        if tok[0] == "]]":
+            if tok[1] == "skip":
                 print("skipping")
                 if self.player:
                     self.player.stop()
@@ -48,7 +50,9 @@ class Bot:
                     self.queue.put(tok[1], block=False)
                     print("Added {} to queue.".format(tok[1]))
                 except queue.Full:
-                    await self.client.send_message(message.channel, 'Sorry the queue is already full.')
+                    await self.client.send_message(
+                        message.channel, "Sorry the queue is already full."
+                    )
 
     async def consume(self):
         asyncio.set_event_loop(self.cons_loop)
@@ -65,8 +69,6 @@ class Bot:
             print(e)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     b = Bot(DISCORD_KEY, DISCORD_CHANNEL)
     b.run()
-
